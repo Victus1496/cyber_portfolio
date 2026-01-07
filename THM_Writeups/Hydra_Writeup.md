@@ -58,4 +58,4 @@ Walkthrough videos often edit out waiting periods — even "quick" brute-force r
 The room effectively demonstrates why common/default passwords are dangerous — both "sunshine" and "butterfly" rank early in rockyou.txt.
 
 
-I Got pretty caught up in trying to figure this out and didn't take any screenshots this time around but I will try to be better about that in the future.
+I got pretty caught up in trying to figure this out and didn't take any screenshots this time around but I will try to be better about that in the future.

@@ -1,41 +1,75 @@
-So I attempted my first CTF this week, I attempted it last week but kept getting the "Failed to connect to server" error, so I gave it the weekend and attempted again today. 
 
-Target Info
-Machine: Billing (MagnusBilling application)
-Target IP: 10.64.159.54
-AttackBox IP (LHOST): 10.64.70.22 (tun0 interface)
-Vulnerable service: MagnusBilling web app on port 80 (CVE-2023-30258 – unauthenticated RCE)
-Other open ports: 22 (SSH), 3306 (MariaDB unauthorized), 5038 (Asterisk AMI)
+# TryHackMe: Billing Room Write-Up
+ 
+**Difficulty:** Easy / Medium  
+**Date Completed:** January 12, 2026  
+**Machine IP:** 10.64.159.54  
+**AttackBox IP:** 10.64.70.22 (tun0)
 
-I started with a couple of NMAP scans.
-First I conducted a full port scan with version detection using nmap -sC -sV -p- --open 10.64.159.54
+## Overview
+This room targets a vulnerable **MagnusBilling** VoIP billing application exposing an **unauthenticated Remote Code Execution** vulnerability (CVE-2023-30258).  
+The goal is to gain initial access via Metasploit, stabilize the shell, and retrieve both user and root flags.
 
-Then I conducted a targeted quick scan on the open ports
+**Reconnaissance & Enumeration**
+Started with standard Nmap scans to identify open ports and services.
+
+**Full port scan with version & default scripts:**
+First
+nmap -sC -sV -p- --open 10.64.159.54
+
+Then
 nmap -sC -sV -p22,80,3306,5038 10.64.159.54
 
+<img width="1905" height="741" alt="Screenshot 2026-01-12 091350" src="https://github.com/user-attachments/assets/28361f8a-c38f-4c39-a290-d0c70b13f4a9" />
 
-Next I had to ID the exploit so I ran msfconsole and used search magnus
-It then gave me the relevant module  exploit/linux/http/magnusbilling_unauth_rce_cve_2023_30258
+**Open ports & services found**
 
-I loaded the module to inspect details and confirmed that it targets the exact vulnerability in MagnusBilling.
+22 → SSH
+80 → HTTP (MagnusBilling web application)
+3306 → MariaDB (unauthenticated access possible)
+5038 → Asterisk AMI
 
-This is about as far as I got on Thursday before running into server issues, so I repeated the steps Monday when I was back at my terminal.
+The web application on port 80 was the clear target — quick research confirmed it was vulnerable to CVE-2023-30258 (Unauthenticated RCE).
 
-When I retried I tried again and boom instant success.
+<img width="1907" height="1390" alt="Screenshot 2026-01-12 091805" src="https://github.com/user-attachments/assets/16b93952-7028-44ec-8e06-d00367591cef" />
 
-I stabilized the shell with shell, python3 -c 'import pty; pty.spawn("bin/bash")'
+**Exploitation**
+Tool used: Metasploit Framework
 
-Privelege escalation
-then sudo -l (ALL) NOPASSWD: /usr/bin/fail2ban-client
-sudo fail2ban-client status 
+Launched msfconsole
+Searched for the vulnerability using
+search magnus command in msf
 
-confirmed
-asterisk-iptables jail
+I selected the matching module
+exploit/linux/http/magnusbilling_unauth_rce_cve_2023_30258
 
-Flags were found at 
+I configured options (RHOSTS, LHOST, payload, etc.)
+Then ran the exploit
+<img width="1907" height="1492" alt="Screenshot 2026-01-12 091851" src="https://github.com/user-attachments/assets/dcdfe66e-bd57-4755-ad38-af2ac2dd2db9" />
 
-cd /root && cat root.txt
+
+**Shell Stabilization**
+Upgraded the basic reverse shell with
+
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+
+**Privilege Escalation & Flag Collection**
+Checked sudo privileges early:
+sudo -l
+Output showed:
+text(ALL) NOPASSWD: /usr/bin/fail2ban-client
+While fail2ban was present (asterisk-iptables jail), the path to root was straightforward in this instance.
+Flags retrieved:
+Bash# User flag
 cat /home/asterisk/user.txt
 
-key takeaways
-Metasploits search command is a useful tool for finding relevant exploits by app name
+**Root flag**
+cd /root && cat root.txt
+Key Takeaways & Lessons Learned
+
+Metasploit's search command is incredibly useful — search magnus instantly found the correct module.
+Always look up CVEs for unfamiliar web applications — many VoIP/billing platforms have had critical unauthenticated RCEs.
+TryHackMe instance connectivity issues are common — if an exploit fails consistently, reset the machine or wait.
+Stabilize reverse shells immediately (pty.spawn) — makes everything much smoother.
+Run sudo -l right after getting a shell — even seemingly innocent sudo rights can be powerful.
+First real CTF success feels amazing — great job pushing through the initial connection issues!

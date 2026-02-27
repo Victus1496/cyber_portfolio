@@ -67,9 +67,9 @@ cat /home/asterisk/user.txt
 cd /root && cat root.txt
 Key Takeaways & Lessons Learned
 
-Metasploit's search command is incredibly useful — search magnus instantly found the correct module.
-Always look up CVEs for unfamiliar web applications — many VoIP/billing platforms have had critical unauthenticated RCEs.
-TryHackMe instance connectivity issues are common — if an exploit fails consistently, reset the machine or wait.
-Stabilize reverse shells immediately (pty.spawn) — makes everything much smoother.
-Run sudo -l right after getting a shell — even seemingly innocent sudo rights can be powerful.
-First real CTF success feels amazing — great job pushing through the initial connection issues!
+Metasploit's search command is incredibly useful, search magnus instantly found the correct module.
+Always look up CVEs for unfamiliar web applications, many VoIP/billing platforms have had critical unauthenticated RCEs.
+TryHackMe instance connectivity issues are common, if an exploit fails consistently, reset the machine or wait.
+Stabilize reverse shells immediately (pty.spawn) , makes everything much smoother.
+Run sudo -l right after getting a shell, even seemingly innocent sudo rights can be powerful.
+First real CTF success feels amazing.

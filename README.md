@@ -1,14 +1,11 @@
 # cyber_portfolio
-Portfolio of a DoD-cleared systems engineer transitioning to offensive security. Features TryHackMe progress  (badges, notes), Raspberry Pi homelab (Docker-based media server with Jellyfin/Audiobookshelf), and hands-on projects. Updated regularly with new experiments and write-ups.
+Portfolio of an ISSE transitioning to offensive security. Features TryHackMe progress  (badges, notes), Raspberry Pi homelab (Docker-based media server with Jellyfin/Audiobookshelf), and hands-on projects. Updated regularly with new experiments and write-ups.
 
 # TryHackMe Progress - Victus1496
 
 Currently at 10/119 badges while completing the PenTest+ path.
 
-Highlights:
-- Blue Teaming Milestones (e.g., Terminated!, First Scenario Completed)
-- Foundations (Networking Nerd, World Wide Web, cat linux.txt)
-- 3 Day Streak
+
 
 Screenshots below. Detailed write-ups coming as I progress.
 
